@@ -82,20 +82,22 @@ module Whois
         # containing the registrant details extracted from the registry answer.
         property_supported :registrant do
           if registered?
-            a1 = (node('address') || [])[1].split(/\s/)
-            zip = a1.shift
-            city = a1.join(' ')
-            Answer::Contact.new(
+            answer = Answer::Contact.new(
               :name => node('name'),
               :organization => node('org'),
-              :address => node('address')[0],
-              :city => city,
-              :zip => zip,
-              :country_code => node('address')[2],
               :phone => node('phone'),
-              :fax => node('fax-no')
+              :fax => node('fax-no'),
+              :created_on => created_on,
+              :updated_on => updated_on,
+              :id => node('hun-id')
             )
-          end
+            if node('address')
+              answer.address = node('address')[0]
+              answer.country_code = node('address')[2]
+              a1 = node('address')[1].split(/\s/)
+              answer.zip = a1.shift
+              answer.city = a1.join(' ')
+            end
         end
 
         # If available, returns an array of name servers entries for this domain
