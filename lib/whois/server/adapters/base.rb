@@ -14,6 +14,7 @@
 #++
 
 
+require 'iconv'
 require 'whois/answer/part'
 require 'whois/answer'
 
@@ -70,6 +71,7 @@ module Whois
           
           # Store an answer part in <tt>@buffer</tt>.
           def append_to_buffer(response, host)
+            response = Iconv.conv('utf-8', @options[:charset], response) if @options[:charset]
             @buffer << ::Whois::Answer::Part.new(response, host)
           end
 

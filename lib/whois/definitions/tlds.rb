@@ -145,7 +145,7 @@ Whois::Server.define :tld, ".hm", "whois.registry.hm"
 Whois::Server.define :tld, ".hn", "whois.afilias-grs.info", {:adapter=>Whois::Server::Adapters::Afilias}
 Whois::Server.define :tld, ".hr", nil, {:web=>"http://www.dns.hr/pretrazivanje.html", :adapter=>Whois::Server::Adapters::Web}
 Whois::Server.define :tld, ".ht", "whois.nic.ht"
-Whois::Server.define :tld, ".hu", "whois.nic.hu"
+Whois::Server.define :tld, ".hu", "whois.nic.hu", {:charset=>'ISO-8859-1'}
 Whois::Server.define :tld, ".id", "whois.pandi.or.id"
 Whois::Server.define :tld, ".ie", "whois.domainregistry.ie"
 Whois::Server.define :tld, ".il", "whois.isoc.org.il"
@@ -229,7 +229,7 @@ Whois::Server.define :tld, ".pm", "whois.nic.fr"
 Whois::Server.define :tld, ".pn", nil, {:web=>"http://www.pitcairn.pn/PnRegistry/", :adapter=>Whois::Server::Adapters::Web}
 Whois::Server.define :tld, ".pr", "whois.nic.pr"
 Whois::Server.define :tld, ".ps", nil, {:web=>"http://www.nic.ps/whois/whois.html", :adapter=>Whois::Server::Adapters::Web}
-Whois::Server.define :tld, ".pt", "whois.dns.pt"
+Whois::Server.define :tld, ".pt", "whois.dns.pt", {:charset=>'ISO-8859-1'}
 Whois::Server.define :tld, ".pw", nil, {:adapter=>Whois::Server::Adapters::None}
 Whois::Server.define :tld, ".py", nil, {:web=>"http://www.nic.py/consultas.html", :adapter=>Whois::Server::Adapters::Web}
 Whois::Server.define :tld, ".qa", nil, {:adapter=>Whois::Server::Adapters::None}
