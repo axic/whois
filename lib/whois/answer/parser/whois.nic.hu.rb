@@ -98,6 +98,7 @@ module Whois
               answer.zip = a1.shift
               answer.city = a1.join(' ')
             end
+          end
         end
 
         # If available, returns an array of name servers entries for this domain
@@ -227,8 +228,8 @@ module Whois
             end
 
             def parse_domain_data
-              if @input.match?(/\S+:\s+.*\n/)
-                while @input.match?(/\S+:\s+.*\n/) && @input.scan(/(\S+):\s+(.*)\n/)
+              if @input.match?(/\S+:[ ]+.*\n/)
+                while @input.match?(/\S+:[ ]+.*\n/) && @input.scan(/(\S+):[ ]+(.*)\n/)
                   key, value = @input[1].strip, @input[2].strip
                   if key == 'person'
                     @ast['name'] = value
@@ -254,8 +255,8 @@ module Whois
             end
 
             def parse_contacts
-              if @input.match?(/\n\S+:\s+.*\n/)
-                while @input.match?(/\n\S+:\s+.*\n/)
+              if @input.match?(/\n\S+:[ ]+.*\n/)
+                while @input.match?(/\n\S+:[ ]+.*\n/)
                   @input.scan(/\n/)
                   parse_contact
                 end
@@ -266,9 +267,9 @@ module Whois
             end
 
             def parse_contact
-              if @input.match?(/\S+:\s+.*\n/)
+              if @input.match?(/\S+:[ ]+.*\n/)
                 contact ||= {}
-                while @input.match?(/\S+:\s+.*\n/) && @input.scan(/(\S+):\s+(.*)\n/)
+                while @input.match?(/\S+:[ ]+.*\n/) && @input.scan(/(\S+):[ ]+(.*)\n/)
                   key, value = @input[1].strip, @input[2].strip
                   if key == 'hun-id'
                     a1 = contact['address'][1].split(/\s/)
