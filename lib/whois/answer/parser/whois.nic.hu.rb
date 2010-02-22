@@ -98,6 +98,7 @@ module Whois
               answer.zip = a1.shift
               answer.city = a1.join(' ')
             end
+            return answer
           end
         end
 
