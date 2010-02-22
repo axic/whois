@@ -21,6 +21,15 @@ OptionParser.new do |opts|
   opts.on("-t", "--timeout [SECONDS]", Integer, "Specify the timeout value") do |seconds|
     options.timeout = seconds
   end
+  
+  opts.on("--parsed", "Parsed output") do
+    options.parsed = true
+  end
+  
+  opts.on("--parsed-only", "Parsed output only") do
+    options.parsed = true
+    options.parsed_only = true
+  end
 
   opts.on_tail("--help", "Show this message") do
     puts opts
@@ -49,7 +58,56 @@ qstring = ARGV.shift
 
 begin
   @client = Whois::Client.new(:timeout => options.timeout)
-  puts @client.query(qstring)
+  query = @client.query(qstring)
+  puts query if not options.parsed_only
+  if options.parsed
+    parsed = query.parser
+
+    puts "Domain: #{qstring}"
+    if parsed.property_supported?(:registered?) and parsed.registered?
+      puts "Domain registered"
+    elsif parsed.property_supported?(:available?) and parsed.available?
+      puts "Domain not registered and is available"
+      abort
+    else
+      abort("Unknown domain status")
+    end
+
+    puts "\nParsed output:"
+    if parsed.property_supported?(:created_on) and parsed.created_on != nil
+      puts "Created: #{parsed.created_on.utc}"
+    end
+    if parsed.property_supported?(:updated_on) and parsed.updated_on != nil
+      puts "Updated: #{parsed.updated_on.utc}"
+    end
+    if parsed.property_supported?(:expires_on) and parsed.expires_on != nil
+      puts "Expires: #{parsed.expires_on.utc}"
+    end
+    if parsed.property_supported?(:nameservers) and parsed.nameservers != nil
+      parsed.nameservers.each_with_index { |ns, index| puts "Nameserver #{index+1}: #{ns}" }
+    end
+    if parsed.property_supported?(:registrant) and parsed.registrant != nil
+      puts "\nRegistrant name: #{parsed.registrant.name}"
+      puts "Registrant organisation: #{parsed.registrant.organization}"
+      puts "Registrant address: #{parsed.registrant.address}"
+      puts "Registrant city: #{parsed.registrant.city}"
+      puts "Registrant zip: #{parsed.registrant.zip}"
+      puts "Registrant country: #{parsed.registrant.country_code}"
+      puts "Registrant phone: #{parsed.registrant.phone}"
+      puts "Registrant fax: #{parsed.registrant.fax}"
+      puts "Registrant email: #{parsed.registrant.email}"
+      puts "Registrant id: #{parsed.registrant.id}"
+    end
+    if parsed.property_supported?(:registrar) and parsed.registrar != nil
+      puts "\nRegistrar name: #{parsed.registrar.name}"
+      puts "Registrar organisation: #{parsed.registrar.organization}"
+      puts "Registrar url: #{parsed.registrar.url}"
+      puts "Registrar id: #{parsed.registrar.id}"
+    end
+    if parsed.property_supported?(:disclaimer) and parsed.disclaimer != nil
+      puts "\nDisclaimer:\n#{parsed.disclaimer}"
+    end
+  end
 rescue Whois::Error => e
   abort(e.message)
 rescue Timeout::Error => e
