@@ -183,7 +183,7 @@ Whois::Server.define :tld, ".lu", "whois.dns.lu"
 Whois::Server.define :tld, ".lv", "whois.nic.lv"
 Whois::Server.define :tld, ".ly", "whois.nic.ly"
 Whois::Server.define :tld, ".ma", "whois.iam.net.ma"
-Whois::Server.define :tld, ".mc", "whois.ripe.net"
+Whois::Server.define :tld, ".mc", "whois.ripe.net", {:charset=>"ISO-8859-1"}
 Whois::Server.define :tld, ".md", "whois.nic.md"
 Whois::Server.define :tld, ".me", "whois.meregistry.net"
 Whois::Server.define :tld, ".mg", "whois.nic.mg"
